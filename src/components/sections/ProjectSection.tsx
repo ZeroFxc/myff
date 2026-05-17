@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { Terminal, ExternalLink } from 'lucide-react';
+import { Terminal, ExternalLink, ShieldX } from 'lucide-react';
 import { PROJECTS } from '../../data/constants';
 import { SectionHeader } from '../ui/SectionHeader';
 import { SpotlightCard } from '../ui/SpotlightCard';
@@ -30,42 +30,52 @@ export function ProjectSection() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
       >
         {PROJECTS.map((p, i) => {
+          const isBanned = 'banned' in p && p.banned;
+
           const content = (
-            <SpotlightCard className="p-6 h-full flex flex-col group relative overflow-hidden">
+            <SpotlightCard className={`p-6 h-full flex flex-col group relative overflow-hidden ${isBanned ? 'opacity-70' : ''}`}>
               {/* Binary Rain Background Effect (Optimized with CSS) */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none z-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiPgo8dGV4dCB4PSIwIiB5PSI4IiBmaWxsPSIjMjJkM2VlIiBmb250LWZhbWlseT0ibW9ub3NwYWNlIiBmb250LXNpemU9IjgiPjE8L3RleHQ+Cjwvc3ZnPg==')] bg-repeat mix-blend-overlay"></div>
 
               {/* Scanning Line Effect */}
               <div className="absolute top-0 left-0 w-full h-[2px] bg-cyan-400/50 shadow-[0_0_10px_#22d3ee] -translate-y-full group-hover:animate-scan z-20 pointer-events-none"></div>
 
+              {/* 封禁标记 */}
+              {isBanned && (
+                <div className="absolute top-2 right-2 z-30 flex items-center gap-1.5 px-2 py-1 rounded bg-red-500/20 border border-red-500/40">
+                  <ShieldX className="w-3.5 h-3.5 text-red-400" />
+                  <span className="text-xs font-mono font-bold text-red-400 tracking-wider">封禁</span>
+                </div>
+              )}
+
               <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-                <ExternalLink className="w-4 h-4 text-cyan-400/50 group-hover:text-cyan-400" />
+                <ExternalLink className={`w-4 h-4 ${isBanned ? 'text-red-400/50' : 'text-cyan-400/50 group-hover:text-cyan-400'}`} />
               </div>
-              <div className="text-gray-500 group-hover:text-cyan-400 transition-colors group-hover:scale-110 transform origin-left w-fit duration-300 z-10 relative">
+              <div className={`transition-colors group-hover:scale-110 transform origin-left w-fit duration-300 z-10 relative ${isBanned ? 'text-red-500/60' : 'text-gray-500 group-hover:text-cyan-400'}`}>
                 {p.icon}
               </div>
               <div className="mt-4 flex-grow z-10 relative">
-                <h3 className="text-lg font-mono font-medium text-gray-200 group-hover:text-cyan-400 transition-colors leading-snug mb-2">
+                <h3 className={`text-lg font-mono font-medium leading-snug mb-2 ${isBanned ? 'text-red-400/80 line-through decoration-red-500/60 decoration-2' : 'text-gray-200 group-hover:text-cyan-400 transition-colors'}`}>
                   <HackerText text={p.name} />
                 </h3>
                 {p.desc && (
-                  <p className="text-sm text-gray-500 group-hover:text-gray-400 transition-colors line-clamp-2">
+                  <p className={`text-sm transition-colors line-clamp-2 ${isBanned ? 'text-red-500/40' : 'text-gray-500 group-hover:text-gray-400'}`}>
                     {p.desc}
                   </p>
                 )}
               </div>
-              <div className="absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r from-cyan-500 to-blue-500 group-hover:w-full transition-all duration-500 ease-out z-10"></div>
+              <div className={`absolute bottom-0 left-0 h-1 w-0 group-hover:w-full transition-all duration-500 ease-out z-10 ${isBanned ? 'bg-gradient-to-r from-red-500 to-red-700' : 'bg-gradient-to-r from-cyan-500 to-blue-500'}`}></div>
             </SpotlightCard>
           );
 
           return (
             <motion.div key={i} variants={item} className="h-full">
-              {p.href ? (
+              {p.href && !isBanned ? (
                 <a href={p.href} target="_blank" rel="noopener noreferrer" className="block h-full">
                   {content}
                 </a>
               ) : (
-                <div className="h-full">{content}</div>
+                <div className="h-full cursor-not-allowed">{content}</div>
               )}
             </motion.div>
           );
