@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+  a, button, [role="button"], input, select, textarea {
+    cursor: none !important;
+  }
+}
+
+/* Screen Shake for Breach */
+.screen-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both infinite;
+}
+
+@keyframes shake {
+  10%, 90% { transform: translate3d(-2px, 1px, 0); filter: hue-rotate(10deg); }
+  20%, 80% { transform: translate3d(3px, -2px, 0); filter: hue-rotate(-10deg); }
+  30%, 50%, 70% { transform: translate3d(-5px, 3px, 0); filter: hue-rotate(20deg); }
+  40%, 60% { transform: translate3d(5px, -3px, 0); filter: hue-rotate(-20deg); }
+}
+
+/* CRT Scanlines */
+.scanlines {
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0,0,0,0.15) 50%,
+    rgba(0,0,0,0.15)
+  );
+  background-size: 100% 4px;
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9990;
+}
+
+/* Avatar Glitch Hover */
+.avatar-glitch {
+  transition: all 0.2s ease;
+}
+.avatar-glitch:hover {
+  animation: glitch-skew 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  box-shadow: -5px 0 15px #00fff9, 5px 0 15px #ff00c1;
+}
+
+@keyframes glitch-skew {
+  0% { transform: skew(0deg); }
+  20% { transform: skew(-10deg); filter: hue-rotate(90deg) contrast(150%); }
+  40% { transform: skew(10deg); filter: hue-rotate(-90deg) contrast(150%); }
+  60% { transform: skew(-5deg); filter: hue-rotate(180deg) contrast(150%); }
+  80% { transform: skew(5deg); filter: hue-rotate(-180deg) contrast(150%); }
+  100% { transform: skew(0deg); }
+}
+
+/* Glitch Effect */
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.glitch-text::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1;
+  clip-path: inset(45% 0 30% 0);
+  animation: glitch-anim 2.5s infinite linear alternate-reverse;
+  will-change: clip-path;
+}
+
+.glitch-text::after {
+  left: -2px;
+  text-shadow: -2px 0 #00fff9, 2px 2px #ff00c1;
+  clip-path: inset(10% 0 60% 0);
+  animation: glitch-anim2 3s infinite linear alternate-reverse;
+  will-change: clip-path;
+}
+
+@keyframes glitch-anim {
+  0% { clip-path: inset(20% 0 80% 0); }
+  20% { clip-path: inset(60% 0 10% 0); }
+  40% { clip-path: inset(40% 0 50% 0); }
+  60% { clip-path: inset(80% 0 5% 0); }
+  80% { clip-path: inset(10% 0 70% 0); }
+  100% { clip-path: inset(30% 0 20% 0); }
+}
+
+@keyframes glitch-anim2 {
+  0% { clip-path: inset(10% 0 60% 0); }
+  20% { clip-path: inset(30% 0 20% 0); }
+  40% { clip-path: inset(70% 0 10% 0); }
+  60% { clip-path: inset(20% 0 50% 0); }
+  80% { clip-path: inset(50% 0 30% 0); }
+  100% { clip-path: inset(5% 0 80% 0); }
+}
+
+@keyframes scan {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(400px); opacity: 0; }
+}
+
+.animate-scan {
+  animation: scan 2s linear infinite;
+}
+
+body {
+  background-color: #050505;
+  background-image: radial-gradient(circle at 50% 0%, #112230 0%, #050505 60%);
+  background-attachment: fixed;
+  color: #ededed;
+  -webkit-font-smoothing: antialiased;
+}
